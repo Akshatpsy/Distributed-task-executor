@@ -63,8 +63,11 @@ Hosted on: API on Railway, PostgreSQL on Neon, queue on a hosted AMQP broker.
 
 ## Limitations
 
-- [For example: one scheduler instance, so the scheduler itself is a single point of failure.]
-- [For example: the demo uses free-tier services that may sleep or expire.]
+- The hosted demo runs only the API and dashboard. Run the project locally to see tasks execute.
+- Free-tier hosting: the Neon database may expire after inactivity and need its schema rebuilt.
+- Runs with a single scheduler instance, so the scheduler is a single point of failure.
+- Tasks can run more than once after a crash, so tasks must be safe to repeat.
+- Not load tested with large numbers of tasks or workers.
 
 ## Project layout
 

@@ -2,8 +2,6 @@
 
 Runs jobs made of tasks that depend on each other (a DAG), spreads the work across multiple workers, and recovers when a worker crashes. Built in Python with PostgreSQL, an AMQP message queue and FastAPI. Solo project.
 
-> Items in [square brackets] are things to check against your code and fill in before you commit this file. Delete this line when done.
-
 ## What it does
 
 - Takes a set of tasks with dependencies and works out a valid run order using Kahn's algorithm (topological sort).
@@ -25,13 +23,11 @@ Client / Dashboard
                   workers write results and heartbeats
 ```
 
-[Replace this diagram if your real flow is different.]
-
 ## How failures are handled
 
 - **Worker crash:** each running task holds a lease that the worker keeps renewing with heartbeats. If the lease expires after [N seconds], the scheduler treats the worker as dead and puts the task back in the queue.
-- **Retries:** a failed task is retried up to [N] times [with / without delay]. After that it goes to the dead-letter queue.
-- **Idempotency:** [one or two sentences on how running the same task twice is made safe, for example a unique key per task run].
+- **Retries:** a failed task is retried up to [N] times. After that it goes to the dead-letter queue.
+- **Idempotency:** a task that runs twice after a crash does not cause duplicate results. Each task run has a unique key, and the worker checks PostgreSQL before running. A task already marked completed is skipped, and the final status update only succeeds once..
 
 ## Run it locally
 
@@ -52,12 +48,9 @@ Then submit one of the jobs in `examples/` and watch it run on the dashboard at 
 ```bash
 python -m pytest
 ```
-
-[Add one line on what the tests cover, for example crash recovery and retries.]
-
 ## Live demo
 
-The hosted demo runs only the API and dashboard. The scheduler and worker are not running there, so tasks you submit stay in `pending` or `queued` by design. To see tasks actually execute, run the project locally or watch [link to a short recording].
+The hosted demo runs only the API and dashboard. The scheduler and worker are not running there, so tasks you submit stay in `pending` or `queued` by design. To see tasks actually execute, run the project locally or watch.
 
 Hosted on: API on Railway, PostgreSQL on Neon, queue on a hosted AMQP broker.
 
